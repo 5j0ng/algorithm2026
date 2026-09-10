@@ -8,5 +8,5 @@
 
 | 이름 | 사진 |
 |------|------|
-| [SelectionSorting](./homework/Selection_Sorting.pde) | <img src="./homework/selectiong_sorting.png" width="300"> |
-| [Bubble](./homework/bubble.pde) | <img src="./homework/bubble.png" width="300"> |
+| [SelectionSorting](./homework/Selection_Sorting.pde) | <img src="./homework/selectiong_sorting.png" width="600"> |
+| [Bubble](./homework/bubble.pde) | <img src="./homework/bubble.png" width="600"> |
