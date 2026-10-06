@@ -1,0 +1,259 @@
+ArrayList<Array> lists;
+Array list, plist, tlist;
+int type=3, napTime=100, len=16, index=0, loop=0;
+boolean autoFlag=true;
+String[] titles = {"selectionSort", "bubbleSort", "insertSort", "mergeSort", "quickSort"};
+PFont f;
+color[] rainbow;   // 무지개 색 목록
+color[] palette;   // 블록 번호(id)별 현재 색
+color DONE_COLOR;  // 정렬 완료 색(노랑)
+
+void setup() {
+  size(900, 600);  
+  f = createFont("Arial-BoldMT-48.vlw", 24);
+  textFont(f);
+  // 노랑은 '완료색'이라 겹치지 않도록 제외한 6색
+  rainbow = new color[] {
+    color(255, 0, 0),     // 빨강
+    color(255, 127, 0),   // 주황
+    color(0, 200, 0),     // 초록
+    color(0, 100, 255),   // 파랑
+    color(75, 0, 130),    // 남색
+    color(148, 0, 211)    // 보라
+  };
+  DONE_COLOR = color(255, 255, 0);
+  run(type);
+}
+
+void draw() {
+  background(200);
+  list = lists.get(index);
+  list.draw(index == loop);   // 마지막 프레임 = 정렬 완료
+  fill(0);
+  if(list.i0 <= 0)
+    text("("+nf(-list.i0,2)+","+nf(-list.j0,2)+") - "+index+"/"+loop 
+      +" napTime:"+napTime+"(a/s)" + " type:"+type+"(z/x)", 20, height-20);
+  else
+    text("("+nf(list.i0,2)+","+nf(list.j0,2)+") - "+index+"/"+loop 
+      +" napTime:"+napTime+"(a/s)" + " type:"+type+"(z/x)", 20, height-20);
+  text(titles[type], 20, 40);
+  if(autoFlag) nextStep();
+}
+
+void nextStep() {
+  if(index==0)
+    delay(10*napTime);
+  else 
+    delay(napTime);
+  if(index<loop) index++;
+  else {
+    index=0;
+    randomizePalette();   // 다시 정렬 시작 -> 색 새로 배정
+  }
+}
+
+void keyPressed() {
+  if(key == ' ') {
+    autoFlag = !autoFlag;
+  }
+  else if(key == 'a') {
+    if(napTime>100)
+      napTime -= 100;
+  }
+  else if(key == 's') {
+    napTime += 100;
+  }
+  else if(key == 'z') {
+    if(type>0){
+      type--;
+      run(type);
+    }  
+  }
+  else if(key == 'x') {
+    if(type<3) {
+      type++;
+      run(type);
+    }  
+  }
+  else if (key == CODED) {
+    if (keyCode == LEFT) {
+      if(index>0) index--;
+    } else if (keyCode == RIGHT) {
+      if(index<loop) index++;
+    } 
+  }
+}
+
+void mousePressed() {
+  if(autoFlag) autoFlag=false;
+  if(mouseButton == LEFT) {
+    if(index>0) index--;
+  }
+  else if(mouseButton == RIGHT) {
+    if(index<loop) index++;
+  }
+}
+
+void randomizePalette() {
+  color[] old = palette;
+  boolean same;
+  do {
+    palette = new color[len];
+    for (int i=0; i<len; i++)
+      palette[i] = rainbow[(int)random(rainbow.length)];
+    same = (old != null && java.util.Arrays.equals(old, palette));
+  } while (same);   // 이전과 똑같은 배색이면 다시 뽑기
+}
+
+void run(int type) {
+  loop = index = 0;
+  randomizePalette();
+  tlist = new Array(len, 0, -1);
+  lists = new ArrayList<Array>();
+  lists.add(new Array(len, 0, -1));
+  list = lists.get(0);
+  list.printArray();
+  if (type==0) selectionSort();
+  else if (type==1) bubbleSort();
+  else if (type==2) insertSort();
+  else if (type==3) mergeSort();
+//  else if (type==4) quickSort();  
+  list = lists.get(loop);
+  list.printArray();
+}
+
+void selectionSort() {
+  int i, j, max, index, tlen=len;
+  for (i=0; i<len; i++) {
+    plist = lists.get(i);
+    lists.add(new Array(len, plist.arr, plist.id, i+1, len-i-1));
+    loop++;
+    list = lists.get(i+1);    
+    max=-1;
+    index=-1;
+    for (j=0; j<tlen; j++) {
+      if (max<list.arr[j]) {
+        max=list.arr[j];
+        index=j;
+      }
+    }
+    if (index!=-1) swap(list, index, tlen-1);
+    tlen--;
+  }
+}
+
+void bubbleSort() {
+  int i, j;
+  for (j=0; j<len-1; j++) {
+    plist = lists.get(loop);
+    lists.add(new Array(len, plist.arr, plist.id, j+1, 0));
+    loop++;
+    for (i=0; i<len-j-1; i++) {
+      plist = lists.get(loop);
+      lists.add(new Array(len, plist.arr, plist.id, j+1, i+1));
+      loop++;
+      list = lists.get(loop);    
+      if (list.arr[i] > list.arr[i+1])
+        swap(list, i, i+1);
+    }
+  }
+}
+
+void insertSort() {
+  int i, j, temp, tempId;
+  for (i=1; i<len; i++) {
+    plist = lists.get(loop);
+    lists.add(new Array(len, plist.arr, plist.id, i, i));
+    loop++;
+    list = lists.get(loop);    
+    temp=list.arr[i];
+    tempId=list.id[i];
+    for (j=i-1; j>=0 && temp<list.arr[j]; j--) {
+      list.arr[j+1] = list.arr[j];
+      list.id[j+1] = list.id[j];
+    }
+    list.arr[j+1] = temp;
+    list.id[j+1] = tempId;
+  }
+}
+
+void mergeSort() {
+  mergeSort(0, len-1);
+}
+
+void mergeSort(int low, int high) {
+  if (low < high) {
+    int middle = low + (high - low)/2;
+    plist = lists.get(loop);
+    lists.add(new Array(len, plist.arr, plist.id, -low, -high));
+    loop++;
+    list = lists.get(loop);    
+    mergeSort(low, middle);
+    mergeSort(middle + 1, high);
+    merge(list, low, middle, high);
+  }
+}
+
+void merge(Array list, int low, int middle, int high) {
+  int i, j, k;
+  i = low;
+  j = middle + 1;
+  k = low;
+  for (i = low; i <= high; i++) {
+    tlist.arr[i] = list.arr[i];
+    tlist.id[i] = list.id[i];
+  }
+  for (i = low; i <= high; i++) {
+    while (i <= middle && j <= high) {
+      if (tlist.arr[i] <= tlist.arr[j]) {
+        list.arr[k] = tlist.arr[i];
+        list.id[k] = tlist.id[i];
+        i++;
+      } 
+      else {
+        list.arr[k] = tlist.arr[j];
+        list.id[k] = tlist.id[j];
+        j++;
+      }
+      k++;
+    }
+    while (i <= middle) {
+      list.arr[k] = tlist.arr[i];
+      list.id[k] = tlist.id[i];
+      k++;
+      i++;
+    }
+  }
+}
+
+/*
+void quickSort() {
+  quickSort(0, list.size()-1);
+}
+
+void quickSort(int low, int high) {
+  int i = low, j = high;
+  int pivot = list.get(low+(high-low)/2);
+  while (i <= j) {
+    while (list.get(i) < pivot) i++;
+    while (list.get(j) > pivot) j--;
+    if (i <= j) {
+      swap(i, j);
+      i++;
+      j--;
+    }
+  }
+  if (low < j) quickSort(low, j);
+  if (i < high) quickSort(i, high);
+  drawAndDelay();
+}
+*/
+
+void swap(Array a, int i, int j) {
+  int tmp=a.arr[j];
+  a.arr[j] = a.arr[i];
+  a.arr[i] = tmp;
+  int tmpId=a.id[j];   // 색(id)도 같이 이동
+  a.id[j] = a.id[i];
+  a.id[i] = tmpId;
+}
