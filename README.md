@@ -1,5 +1,5 @@
 # Algorithm2026
-### Homework1
+### Homework1 글 누르면 바로 코드가 보입니다
 <!-- 이 부분은 화면에 안 보여요 
 [SelectionSorting](./homework/Selection_Sorting.pde)<br>  
 ![Alt selectiong_sorting](./homework/selectiong_sorting.png)<br>
