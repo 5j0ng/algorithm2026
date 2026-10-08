@@ -18,7 +18,8 @@
 | [InsertionSort](./homework/Insertion_Sort.pde) | <img src="./homework/Insertion%20Sort.png" width="750"> |
 | [MergeSort](./homework/Merge_Sort.pde) | <img src="./homework/Merge%20Sort.png" width="750"> |
 | [QuickSort](./homework/Quick_Sort.pde) | <img src="./homework/Quick%20Sort.png" width="750"> |-->
-| 이름 | 사진 |
-|------|------|
-| [SortAnimation](./homework/SortAnimation.pde)<br>[Array](./homework/Array.pde) | <img src="./homework/sortanan.png" width="750"> |
-| [SortAnimation (애니메이션)](./homework/SortAnimation.pde)<br>[Array](./homework/Array.pde) | <img src="./homework/sortana.gif" width="750"> |
+
+| SortAnimation | SortAnimation (애니메이션) | BinarySearchTree |
+|:---:|:---:|:---:|
+| [SortAnimation](./homework/SortAnimation.pde)<br>[Array](./homework/Array.pde) | [SortAnimation](./homework/SortAnimation.pde)<br>[Array](./homework/Array.pde) | [BinarySearchTree](./homework/BinarySearchTree.pde) |
+| <img src="./homework/sortanan.png" width="280"> | <img src="./homework/sortana.gif" width="280"> | <img src="./homework/tree.png" width="280"> |
